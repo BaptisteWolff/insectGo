@@ -17,7 +17,6 @@ figure(3); imshow(Ic);
 %%
  If = imfill(Ic,'holes');
  figure(4); imshow(If);
- %figure(4); contour(Ic);
  %%
  label = bwlabel(If);
  
@@ -25,12 +24,10 @@ figure(3); imshow(Ic);
  %%
  stat = regionprops(label,'Area');
  %%
-area = [stat.Area];
-[val,idx] = max(area);
  
-%%
-Ilogic = (label==15);
-figure(6); imshow(Ilogic);
-
-
+ [= max([stat.Area]);
+ 
+ 
      
+     
+%figure(4); contour(Ic);
