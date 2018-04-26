@@ -22,7 +22,7 @@ for ii=1:nfiles
    currentfilename = ['Images/' imagefiles(ii).name];
    currentimage = imread(currentfilename);
    I = currentimage;
-%    I = gpuArray(I);
+%    I = im2double(gpuArray(I));
 
     
 %     I = imresize(I,[2000 2000]);
