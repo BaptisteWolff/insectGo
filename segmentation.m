@@ -33,7 +33,7 @@ for ii=1:nfiles
     figure(); 
     subplot(1,2,1);
     imshow(Igray);
-    s = strel('disk', 10);
+    s = strel('disk', 20);%7
     Igray = imopen(Igray, s);
 
 
@@ -48,10 +48,11 @@ for ii=1:nfiles
     % bw = bw1  bw2;
 %     figure(2); imshow(bw);
     %%
-    s = strel('disk', 6);
+    s = strel('disk', 6);%6
     Ic = imdilate(bw, s);
 %     s = strel('disk', 20);
-%     IC = imclose(Ic, s);
+% s = strel('disk',2);
+%     Ic = imerode(Ic, s);
 
 
 %     figure(3); imshow(Ic);
@@ -76,6 +77,26 @@ for ii=1:nfiles
 
     %%
     Ilogic = (label==idx);
+%     
+%     
+% %     %% ajout
+    
+    s = strel('disk', 12);%6
+    Ilogic = imdilate(Ilogic, s);
+%     s = strel('disk', 20);
+%     IC = imclose(Ic, s);
+
+
+%     figure(3); imshow(Ic);
+
+    %
+     Ilogic = imfill(Ilogic,'holes');
+%      s = strel('disk', 10);
+   Ilogic = imerode(Ilogic, s);
+%    Ilogic = imopen(Ilogic,s);
+    
+    %% ajout
+    
 %     figure(); 
     subplot(1,2,2);
     imshow(Ilogic);
