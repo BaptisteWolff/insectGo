@@ -51,8 +51,7 @@ for ii=1:nfiles
     s = strel('disk', 6);%6
     Ic = imdilate(bw, s);
 %     s = strel('disk', 20);
-% s = strel('disk',2);
-%     Ic = imerode(Ic, s);
+%     IC = imerode(Ic, s);
 
 
 %     figure(3); imshow(Ic);
