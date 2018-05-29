@@ -1,3 +1,4 @@
 http://cs231n.stanford.edu/reports/2016/pdfs/283_Report.pdf
 https://fr.mathworks.com/help/nnet/examples/create-simple-deep-learning-network-for-classification.html
 https://fr.mathworks.com/matlabcentral/answers/359560-resize-images-in-imagedatastore-on-gpu
+https://fr.mathworks.com/help/nnet/ref/trainnetwork.html

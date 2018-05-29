@@ -1,7 +1,8 @@
 clear all; close all; clc;
+'start'
 
-%% Ce script resize les images de la bdd en 227 * 227
-
+%% Ce script resize les images de la bdd en resize * resize
+resize = 256;
 digitDatasetPath = 'BDD';
 imds = imageDatastore(digitDatasetPath, ...
     'IncludeSubfolders',true,'LabelSource','foldernames');
@@ -9,7 +10,7 @@ imds = imageDatastore(digitDatasetPath, ...
 
 %% Resize
 imds.ReadSize = numpartitions(imds);
-imds.ReadFcn = @(loc)imresize(imread(loc),[220,220]);
+imds.ReadFcn = @(loc)imresize(imread(loc),[resize,resize]);
 
 %% check random
 % figure(1);
@@ -24,8 +25,9 @@ for i = 1:numpartitions(imds)
     s = size(image,3);
     if s~=3
        files{i}
-       delete files{i}
-    else
-        imwrite(image,files{i});
+       image(:,:,2) = image(:,:,1);
+       image(:,:,3) = image(:,:,1);
     end
+    imwrite(image,files{i});
 end
+'end'
