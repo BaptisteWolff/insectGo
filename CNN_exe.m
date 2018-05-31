@@ -1,4 +1,4 @@
-close all; clear all; clc;
+
 
 %% Charge le réseau de neuronnes
 load netInsect1

@@ -36,60 +36,60 @@ numTrainFiles = min(floor(min(labelCount.Count)*3/4)) % nombre d'images d'entrai
 % imdsTrain = augmentedImageSource([s(1) s(2) 3],imdsTrain)
 
 %% Architecture du réseau de neuronnes
-filterSize = 8;
+filterNumber = 16;
 layers = [
     imageInputLayer([s(1) s(2) 3]) % size1 size2 nCouleurs
     %%%
     % conv - 64
-    convolution2dLayer(3,filterSize,'Padding',1)
+    convolution2dLayer(3,filterNumber,'Padding',1)
     reluLayer
     
-    % conv - 64
-    convolution2dLayer(3,filterSize,'Padding',1)
-    reluLayer
+%     % conv - 64
+%     convolution2dLayer(3,filterNumber,'Padding',1)
+%     reluLayer
     
     % maxpool
     maxPooling2dLayer(2,'Stride',2)
     
     %%%
     % conv - 128
-    convolution2dLayer(3,filterSize*2,'Padding',1)
+    convolution2dLayer(3,filterNumber*2,'Padding',1)
     reluLayer
     
-    % conv - 128
-    convolution2dLayer(3,filterSize*2,'Padding',1)
-    reluLayer
+%     % conv - 128
+%     convolution2dLayer(3,filterNumber*2,'Padding',1)
+%     reluLayer
     
     % maxpool
     maxPooling2dLayer(2,'Stride',2)
     
     %%%
     % conv - 256
-    convolution2dLayer(3,filterSize*4,'Padding',1)
+    convolution2dLayer(3,filterNumber*4,'Padding',1)
     reluLayer
-    
-    % conv - 256
-    convolution2dLayer(3,filterSize*4,'Padding',1)
-    reluLayer
+%     
+%     % conv - 256
+%     convolution2dLayer(3,filterNumber*4,'Padding',1)
+%     reluLayer
     
     % maxpool
     maxPooling2dLayer(2,'Stride',2)
     
     %%%
     % conv - 512
-    convolution2dLayer(3,filterSize*8,'Padding',1)
+    convolution2dLayer(3,filterNumber*8,'Padding',1)
     reluLayer
-    
-    % conv - 512
-    convolution2dLayer(3,filterSize*8,'Padding',1)
-    reluLayer
+%     
+%     % conv - 512
+%     convolution2dLayer(3,filterNumber*8,'Padding',1)
+%     reluLayer
     
     % maxpool
     maxPooling2dLayer(2,'Stride',2)
     
     %%%
-    fullyConnectedLayer(labelCountSize*20)
-    fullyConnectedLayer(labelCountSize*20)
+%     fullyConnectedLayer(labelCountSize*20)
+    fullyConnectedLayer(labelCountSize*10)
     fullyConnectedLayer(labelCountSize)
     softmaxLayer
     classificationLayer];
@@ -104,10 +104,11 @@ layers = [
 
 options = trainingOptions('sgdm',...
       'LearnRateSchedule','piecewise',...
-      'InitialLearnRate',0.1,...
-      'LearnRateDropFactor',0.1,... % drop * learnRate
-      'LearnRateDropPeriod',5,...  % nb d'époques à partir dequels le learnrate est mult par le drop factor
-      'MaxEpochs',20);
+      'InitialLearnRate',0.01,...
+      'LearnRateDropFactor',0.9,... % drop * learnRate
+      'LearnRateDropPeriod',1,...  % nb d'époques à partir dequels le learnrate est mult par le drop factor
+      'MiniBatchSize',64,... % 128 par défault
+      'MaxEpochs',15);
   
       %'MiniBatchSize',200,...
 

@@ -18,6 +18,10 @@ imds.ReadFcn = @(loc)imresize(imread(loc),[resize,resize]);
 % figure(2);
 % img = readimage(imds,222); imshow(img); size(img)
 
+%% crop
+crop = 1 %
+cropSize = floor(resize/16);
+
 %% save
 files = imds.Files;
 for i = 1:numpartitions(imds)
@@ -27,6 +31,9 @@ for i = 1:numpartitions(imds)
        files{i}
        image(:,:,2) = image(:,:,1);
        image(:,:,3) = image(:,:,1);
+    end
+    if crop == 1
+       image = image(1:resize-cropSize,:,:); 
     end
     imwrite(image,files{i});
 end
