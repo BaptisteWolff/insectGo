@@ -122,7 +122,7 @@ YValidation = imdsValidation.Labels;
 accuracy = sum(YPred == YValidation)/numel(YValidation)
 
 %% Sauvegarde
-netInsect1 = net;
+netInsect2 = net;
 save netInsect1
 % 
 % %% Generation d'une fonction

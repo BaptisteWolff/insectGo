@@ -36,7 +36,7 @@ numTrainFiles = min(floor(min(labelCount.Count)*3/4)) % nombre d'images d'entrai
 % imdsTrain = augmentedImageSource([s(1) s(2) 3],imdsTrain)
 
 %% Architecture du réseau de neuronnes
-filterNumber = 16;
+filterNumber = 32;
 layers = [
     imageInputLayer([s(1) s(2) 3]) % size1 size2 nCouleurs
     %%%
@@ -53,7 +53,7 @@ layers = [
     
     %%%
     % conv - 128
-    convolution2dLayer(3,filterNumber*2,'Padding',1)
+    convolution2dLayer(3,filterNumber*4,'Padding',1)
     reluLayer
     
 %     % conv - 128
