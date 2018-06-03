@@ -29,36 +29,39 @@ img = readimage(imds,1);
 s = size(img)
 
 %% Séparation des images d'entrainement/de test + mélange de toutes les images
-numTrainFiles = min(floor(min(labelCount.Count)*3/4)) % nombre d'images d'entrainement par catégorie
+numTrainFiles = floor(min(labelCount.Count)*3/4) % nombre d'images d'entrainement par catégorie
 [imdsTrain,imdsValidation] = splitEachLabel(imds,numTrainFiles,'randomize');
 
 %% Augmente le nombre d'images avec des transformations
-% imdsTrain = augmentedImageSource([s(1) s(2) 3],imdsTrain)
+imageAugmenter = imageDataAugmenter( ...
+    'RandXReflection',true,...
+    'RandYReflection',true,...
+    'RandRotation',[0,360], ...
+    'RandXScale',[1 2],...
+    'RandYScale',[1 2])
+%     'RandXTranslation',[-30 30], ...
+%     'RandYTranslation',[-30 30])
+    
+imdsTrain = augmentedImageDatastore([s(1) s(2) 3],imdsTrain, 'DataAugmentation',imageAugmenter);
 
 %% Architecture du réseau de neuronnes
-filterNumber = 32;
+filterNumber = 64;
 layers = [
     imageInputLayer([s(1) s(2) 3]) % size1 size2 nCouleurs
     %%%
     % conv - 64
     convolution2dLayer(3,filterNumber,'Padding',1)
+    batchNormalizationLayer
     reluLayer
-    
-%     % conv - 64
-%     convolution2dLayer(3,filterNumber,'Padding',1)
-%     reluLayer
     
     % maxpool
     maxPooling2dLayer(2,'Stride',2)
     
     %%%
     % conv - 128
-    convolution2dLayer(3,filterNumber*4,'Padding',1)
+    convolution2dLayer(3,filterNumber*2,'Padding',1)
+    batchNormalizationLayer
     reluLayer
-    
-%     % conv - 128
-%     convolution2dLayer(3,filterNumber*2,'Padding',1)
-%     reluLayer
     
     % maxpool
     maxPooling2dLayer(2,'Stride',2)
@@ -66,11 +69,8 @@ layers = [
     %%%
     % conv - 256
     convolution2dLayer(3,filterNumber*4,'Padding',1)
+    batchNormalizationLayer
     reluLayer
-%     
-%     % conv - 256
-%     convolution2dLayer(3,filterNumber*4,'Padding',1)
-%     reluLayer
     
     % maxpool
     maxPooling2dLayer(2,'Stride',2)
@@ -78,28 +78,30 @@ layers = [
     %%%
     % conv - 512
     convolution2dLayer(3,filterNumber*8,'Padding',1)
+    batchNormalizationLayer
     reluLayer
-%     
-%     % conv - 512
-%     convolution2dLayer(3,filterNumber*8,'Padding',1)
-%     reluLayer
     
     % maxpool
     maxPooling2dLayer(2,'Stride',2)
     
     %%%
 %     fullyConnectedLayer(labelCountSize*20)
-    fullyConnectedLayer(labelCountSize*10)
+    fullyConnectedLayer(labelCountSize*100)
     fullyConnectedLayer(labelCountSize)
     softmaxLayer
     classificationLayer];
 
 %% Options d'entrainement
 % options = trainingOptions('sgdm', ...
-%     'MaxEpochs',4, ...
+%     'MaxEpochs',40, ...
 %     'ValidationData',imdsValidation, ...
 %     'ValidationFrequency',30, ...
 %     'Verbose',false, ...
+%     'LearnRateSchedule','piecewise',... %none or piecewise to update learning rate
+%     'InitialLearnRate',0.01,...
+%     'LearnRateDropFactor',0.9,... % drop * learnRate
+%     'LearnRateDropPeriod',1,...  % nb d'époques à partir dequels le learnrate est mult par le drop factor
+%     'MiniBatchSize',64,... % 128 par défault
 %     'Plots','training-progress');
 
 options = trainingOptions('sgdm',...
@@ -110,7 +112,7 @@ options = trainingOptions('sgdm',...
       'MiniBatchSize',64,... % 128 par défault
       'MaxEpochs',15);
   
-      %'MiniBatchSize',200,...
+%       'MiniBatchSize',200,...
 
 %% Entrainement!!
 net = trainNetwork(imdsTrain,layers,options);

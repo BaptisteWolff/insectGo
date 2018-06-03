@@ -36,61 +36,26 @@ numTrainFiles = min(floor(min(labelCount.Count)*3/4)) % nombre d'images d'entrai
 % imdsTrain = augmentedImageSource([s(1) s(2) 3],imdsTrain)
 
 %% Architecture du réseau de neuronnes
-filterNumber = 16;
 layers = [
-    imageInputLayer([s(1) s(2) 3]) % size1 size2 nCouleurs
-    %%%
-    % conv - 64
-    convolution2dLayer(3,filterNumber,'Padding',1)
-    reluLayer
+    imageInputLayer([s(1) s(2) 3])
     
-%     % conv - 64
-%     convolution2dLayer(3,filterNumber,'Padding',1)
-%     reluLayer
+    convolution2dLayer(3,8,'Padding','same')
+    batchNormalizationLayer
+    reluLayer   
     
-    % maxpool
     maxPooling2dLayer(2,'Stride',2)
     
-    %%%
-    % conv - 128
-    convolution2dLayer(3,filterNumber*2,'Padding',1)
-    reluLayer
+    convolution2dLayer(3,16,'Padding','same')
+    batchNormalizationLayer
+    reluLayer   
     
-%     % conv - 128
-%     convolution2dLayer(3,filterNumber*2,'Padding',1)
-%     reluLayer
-    
-    % maxpool
     maxPooling2dLayer(2,'Stride',2)
     
-    %%%
-    % conv - 256
-    convolution2dLayer(3,filterNumber*4,'Padding',1)
-    reluLayer
-%     
-%     % conv - 256
-%     convolution2dLayer(3,filterNumber*4,'Padding',1)
-%     reluLayer
+    convolution2dLayer(3,32,'Padding','same')
+    batchNormalizationLayer
+    reluLayer   
     
-    % maxpool
-    maxPooling2dLayer(2,'Stride',2)
-    
-    %%%
-    % conv - 512
-    convolution2dLayer(3,filterNumber*8,'Padding',1)
-    reluLayer
-%     
-%     % conv - 512
-%     convolution2dLayer(3,filterNumber*8,'Padding',1)
-%     reluLayer
-    
-    % maxpool
-    maxPooling2dLayer(2,'Stride',2)
-    
-    %%%
-%     fullyConnectedLayer(labelCountSize*20)
-    fullyConnectedLayer(labelCountSize*10)
-    fullyConnectedLayer(labelCountSize)
+    fullyConnectedLayer(5)
     softmaxLayer
     classificationLayer];
 
@@ -123,7 +88,7 @@ accuracy = sum(YPred == YValidation)/numel(YValidation)
 
 %% Sauvegarde
 netInsect2 = net;
-save netInsect1
+save netInsect2
 % 
 % %% Generation d'une fonction
 % genFunction(net, 'insectClassificationNet','MatrixOnly','yes');

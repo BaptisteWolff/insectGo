@@ -1,8 +1,12 @@
 
 
 %% Charge le réseau de neuronnes
-load netInsect1
-net = netInsect1;
+% load netInsect1
+% net = netInsect1;
+% net = vgg16
+load netInsectVgg16
+net = netInsectVgg16;
+
 %% Charge la BDD
 % currentFolder = pwd;
 % digitDatasetPath = [currentFolder '\BDD'];
