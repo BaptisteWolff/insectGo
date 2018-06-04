@@ -37,7 +37,8 @@ n = nbImagesTest*size(labelCount,1);
 for i=1:n
     subplot(2,5,i);
     imshow(readimage(imdsTest,i));
-    t = [cellstr(c(i)) cellstr(labels(i))];
+%     t = [cellstr(c(i)) cellstr(labels(i))];
+    t = [insectClassification(imdsTest.Files{i}, net) cellstr(labels(i))];
     title(t)
 end
 

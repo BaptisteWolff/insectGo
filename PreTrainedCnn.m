@@ -29,7 +29,7 @@ img = readimage(imds,1);
 s = size(img)
 
 %% Séparation des images d'entrainement/de test + mélange de toutes les images
-numTrainFiles = floor(min(labelCount.Count)*3/4) % nombre d'images d'entrainement par catégorie
+numTrainFiles = floor(min(labelCount.Count)*4/5) % nombre d'images d'entrainement par catégorie
 [imdsTrain,imdsValidation] = splitEachLabel(imds,numTrainFiles,'randomize');
 
 %% Augmente le nombre d'images avec des transformations
@@ -60,12 +60,14 @@ layers = [
 %% Options d'entrainement
 options = trainingOptions('sgdm', ...
     'MiniBatchSize',30, ...
-    'MaxEpochs',2, ...
+    'MaxEpochs',3, ...
     'InitialLearnRate',1e-4, ...
     'ValidationData',imdsValidation, ...
-    'ValidationFrequency',100, ...
+    'ValidationFrequency',116, ...
     'ValidationPatience',Inf, ...
     'Verbose',false, ...
+    'LearnRateDropFactor',0.5,... % drop * learnRate
+    'LearnRateDropPeriod',1,...  % nb d'époques à partir dequels le learnrate est mult par le drop factor
     'Plots','training-progress');
 
 % options = trainingOptions('sgdm',...
@@ -86,8 +88,8 @@ net = trainNetwork(imdsTrain,layers,options);
 % accuracy = sum(YPred == YValidation)/numel(YValidation)
 
 %% Sauvegarde
-netInsectVgg16 = net;
-save netInsectVgg16
+% netInsectVgg16 = net;
+% save netInsectVgg16
 
 %% Generation d'une fonction
 % genFunction(net, 'insectClassificationNet','MatrixOnly','yes');
